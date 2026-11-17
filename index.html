@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillGap CPE — Computer Engineering Platform</title>
+  <!-- Google Fonts: Prompt for Thai & Inter for English/Numbers -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cpe: {
+              navy: '#0A1647',
+              royal: '#1D39C4',
+              periwinkle: '#7393FF',
+              sky: '#A8D1FA',
+              green: '#3FA34D',
+            }
+          },
+          fontFamily: {
+            sans: ['Prompt', 'Inter', 'sans-serif'],
+            en: ['Inter', 'Prompt', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Prompt', 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-en {
+      font-family: 'Inter', 'Prompt', sans-serif;
+    }
+    /* Smooth screen transition */
+    .screen-view {
+      display: none;
+      animation: fadeSlideIn 0.25s ease-out forwards;
+    }
+    .screen-view.active {
+      display: block;
+    }
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900 pb-20">
+
+  <!-- =========================================================
+       TOP NAVIGATION BAR (Student / Teacher / Hidden on Landing)
+       ========================================================= -->
+  <header id="main-navbar" class="hidden sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Logo (Clickable to Home/Landing) -->
+      <button onclick="navigateTo('screen-1')" class="flex items-center gap-2.5 text-left group focus:outline-none">
+        <div class="w-9 h-9 flex-shrink-0">
+          <!-- Inline SVG Logo Mark -->
+          <svg viewBox="0 0 100 90" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+            <defs>
+              <linearGradient id="navLogoGrad1" x1="10" y1="70" x2="85" y2="15" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#0A1647"/>
+                <stop offset="45%" stop-color="#1D39C4"/>
+                <stop offset="100%" stop-color="#3FA34D"/>
+              </linearGradient>
+              <linearGradient id="navBarGrad" x1="10" y1="82" x2="90" y2="82" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1D39C4"/>
+                <stop offset="72%" stop-color="#7393FF"/>
+                <stop offset="73%" stop-color="#CBD5E1"/>
+                <stop offset="100%" stop-color="#CBD5E1"/>
+              </linearGradient>
+            </defs>
+            <!-- Circuit traces & rising arrow -->
+            <path d="M12 64 C26 64, 28 32, 46 32 C54 32, 57 42, 65 36 L77 24" stroke="url(#navLogoGrad1)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M62 16 L84 16 L84 38" fill="url(#navLogoGrad1)"/>
+            <path d="M16 46 C22 26, 40 20, 56 24" stroke="#7393FF" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="56" cy="24" r="3.5" fill="#1D39C4"/>
+            <path d="M32 66 L42 50 L54 56 L72 38" stroke="#3FA34D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="32" cy="66" r="3.5" fill="#0A1647"/>
+            <circle cx="72" cy="38" r="3.5" fill="#3FA34D"/>
+            <rect x="46" y="14" width="5" height="5" rx="1" fill="#7393FF"/>
+            <rect x="57" y="10" width="6" height="6" rx="1" fill="#3FA34D"/>
+            <!-- Bottom progress bar -->
+            <rect x="12" y="78" width="76" height="6" rx="3" fill="url(#navBarGrad)"/>
+          </svg>
+        </div>
+        <div class="leading-none">
+          <div class="font-en font-extrabold text-lg tracking-tight text-[#0A1647] group-hover:text-[#1D39C4] transition-colors">
+            SkillGap <span class="text-[#1D39C4]">CPE</span>
+          </div>
+          <div class="font-en text-[9px] font-semibold tracking-wider text-slate-400 uppercase mt-0.5">
+            Computer Engineering
+          </div>
+        </div>
+      </button>
+
+      <!-- Student Navigation Links -->
+      <nav id="student-nav-links" class="hidden md:flex items-center gap-1">
+        <button data-nav="screen-2" onclick="navigateTo('screen-2')" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          หน้าหลัก
+        </button>
+        <button data-nav="screen-3" onclick="navigateTo('screen-3')" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          เล่าโปรเจกต์
+        </button>
+        <button data-nav="screen-5" onclick="navigateTo('screen-5')" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          ค้นหาสายงาน
+        </button>
+        <button data-nav="screen-6" onclick="navigateTo('screen-6')" class="nav-tab px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          Skill Gap
+        </button>
+      </nav>
+
+      <!-- Teacher Navigation Links -->
+      <nav id="teacher-nav-links" class="hidden items-center gap-1">
+        <button onclick="openTeacherModal('overview')" class="px-3.5 py-2 rounded-lg text-sm font-semibold text-[#1D39C4] bg-[#A8D1FA]/30 transition">
+          ภาพรวม
+        </button>
+        <button onclick="openTeacherModal('skills')" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          จัดการทักษะ
+        </button>
+        <button onclick="openTeacherModal('careers')" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          สายงานและเกณฑ์
+        </button>
+        <button onclick="openTeacherModal('survey')" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-[#1D39C4] hover:bg-slate-50 transition">
+          แบบสำรวจ
+        </button>
+      </nav>
+
+      <!-- Right User Profile -->
+      <div id="student-user-badge" class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-200/80 pl-1.5 pr-3 py-1 rounded-full">
+          <span class="w-7 h-7 rounded-full bg-[#1D39C4] text-white text-xs font-semibold flex items-center justify-center">
+            ส
+          </span>
+          <span class="text-sm font-medium text-slate-700 hidden sm:inline">สมชาย ใจดี</span>
+        </div>
+        <button onclick="navigateTo('screen-1')" title="ออกจากระบบ" class="text-xs text-slate-400 hover:text-slate-700 px-2 py-1 rounded-lg hover:bg-slate-100 transition">
+          ออก
+        </button>
+      </div>
+
+      <div id="teacher-user-badge" class="hidden items-center gap-3">
+        <div class="flex items-center gap-2 bg-[#0A1647]/5 border border-[#0A1647]/15 pl-1.5 pr-3 py-1 rounded-full">
+          <span class="w-7 h-7 rounded-full bg-[#0A1647] text-white text-xs font-semibold flex items-center justify-center">
+            อ
+          </span>
+          <span class="text-sm font-medium text-[#0A1647] hidden sm:inline">อาจารย์ผู้ดูแล</span>
+        </div>
+        <button onclick="navigateTo('screen-1')" class="text-xs font-medium text-slate-600 hover:text-rose-600 px-2.5 py-1.5 rounded-lg border border-slate-200 hover:border-rose-200 bg-white transition">
+          ออกจากระบบ
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Secondary Student Nav -->
+    <div id="student-mobile-nav" class="md:hidden flex items-center justify-around border-t border-slate-100 bg-white px-2 py-1.5 text-xs">
+      <button data-nav="screen-2" onclick="navigateTo('screen-2')" class="nav-tab px-2.5 py-1.5 rounded-lg font-medium text-slate-600">หน้าหลัก</button>
+      <button data-nav="screen-3" onclick="navigateTo('screen-3')" class="nav-tab px-2.5 py-1.5 rounded-lg font-medium text-slate-600">เล่าโปรเจกต์</button>
+      <button data-nav="screen-5" onclick="navigateTo('screen-5')" class="nav-tab px-2.5 py-1.5 rounded-lg font-medium text-slate-600">ค้นหาสายงาน</button>
+      <button data-nav="screen-6" onclick="navigateTo('screen-6')" class="nav-tab px-2.5 py-1.5 rounded-lg font-medium text-slate-600">Skill Gap</button>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       MAIN CONTAINER FOR ALL 7 SCREENS
+       ========================================================= -->
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+    <!-- *********************************************************
+         SCREEN 1: หน้าแรก & เข้าสู่ระบบ (Landing & Login)
+         ********************************************************* -->
+    <section id="screen-1" class="screen-view active">
+      <div class="min-h-[82vh] flex items-center">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+
+          <!-- Left Column: Brand Identity + Value Proposition + 3 Steps -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Full Brand Logo Block -->
+            <div class="inline-flex items-center gap-4 bg-white px-5 py-3.5 rounded-2xl border border-slate-200/80 shadow-sm">
+              <div class="w-14 h-12 flex-shrink-0">
+                <svg viewBox="0 0 110 92" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                  <defs>
+                    <linearGradient id="heroLogoGrad" x1="10" y1="72" x2="95" y2="12" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#0A1647"/>
+                      <stop offset="45%" stop-color="#1D39C4"/>
+                      <stop offset="100%" stop-color="#3FA34D"/>
+                    </linearGradient>
+                    <linearGradient id="heroBarGrad" x1="10" y1="84" x2="100" y2="84" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#1D39C4"/>
+                      <stop offset="72%" stop-color="#7393FF"/>
+                      <stop offset="73%" stop-color="#CBD5E1"/>
+                      <stop offset="100%" stop-color="#CBD5E1"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 66 C28 66, 30 32, 49 32 C58 32, 62 43, 71 36 L85 22" stroke="url(#heroLogoGrad)" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M68 14 L92 14 L92 38" fill="url(#heroLogoGrad)"/>
+                  <path d="M16 47 C23 26, 42 19, 60 23" stroke="#7393FF" stroke-width="4" stroke-linecap="round"/>
+                  <circle cx="60" cy="23" r="3.5" fill="#1D39C4"/>
+                  <path d="M33 68 L44 51 L57 57 L77 38" stroke="#3FA34D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="33" cy="68" r="3.5" fill="#0A1647"/>
+                  <circle cx="77" cy="38" r="3.5" fill="#3FA34D"/>
+                  <rect x="49" y="13" width="5" height="5" rx="1" fill="#7393FF"/>
+                  <rect x="61" y="9" width="6" height="6" rx="1" fill="#3FA34D"/>
+                  <rect x="12" y="80" width="84" height="6" rx="3" fill="url(#heroBarGrad)"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-en font-extrabold text-2xl sm:text-3xl tracking-tight leading-none text-[#0A1647]">
+                  SkillGap <span class="text-[#1D39C4]">CPE</span>
+                </div>
+                <div class="font-en text-[11px] font-semibold tracking-[0.14em] text-slate-500 uppercase mt-1.5">
+                  Computer Engineering Platform
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero Headline -->
+            <div class="space-y-3">
+              <h1 class="text-3xl sm:text-4xl font-bold text-[#0A1647] leading-snug">
+                ยังไม่รู้ว่าตัวเองถนัดอะไร?<br/>
+                <span class="text-[#1D39C4]">เริ่มจากเล่าสิ่งที่เคยทำ</span>
+              </h1>
+              <p class="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl">
+                ระบบช่วยแปลงโปรเจกต์ที่คุณเคยทำเป็นทักษะ แนะนำสายงานที่น่าลอง และบอกว่าต้องเรียนรู้อะไรเพิ่ม
+              </p>
+            </div>
+
+            <!-- 3 Numbered Step Cards -->
+            <div class="space-y-3 pt-1">
+              <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200/90 shadow-sm hover:border-[#7393FF] transition">
+                <div class="w-9 h-9 rounded-xl bg-[#0A1647] text-white font-en font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  1
+                </div>
+                <p class="text-sm sm:text-base font-medium text-slate-800">
+                  เล่าโปรเจกต์ที่เคยทำ แล้วให้ AI ช่วยหาทักษะที่ซ่อนอยู่
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200/90 shadow-sm hover:border-[#7393FF] transition">
+                <div class="w-9 h-9 rounded-xl bg-[#1D39C4] text-white font-en font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  2
+                </div>
+                <p class="text-sm sm:text-base font-medium text-slate-800">
+                  ตอบแบบสำรวจสั้นๆ เพื่อดูว่าสายงานไหนน่าลอง
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200/90 shadow-sm hover:border-[#7393FF] transition">
+                <div class="w-9 h-9 rounded-xl bg-[#7393FF] text-white font-en font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  3
+                </div>
+                <p class="text-sm sm:text-base font-medium text-slate-800">
+                  เลือกสายงาน แล้วดูว่าทักษะไหนยังขาด
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Login Card -->
+          <div class="lg:col-span-5">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50 p-6 sm:p-8">
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold text-[#0A1647]">เข้าสู่ระบบ</h2>
+                <p class="text-sm text-slate-500 mt-1">สำหรับนักศึกษาสาขาวิศวกรรมคอมพิวเตอร์</p>
+              </div>
+
+              <form onsubmit="handleStudentLogin(event)" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-slate-700 mb-1.5">อีเมล</label>
+                  <input
+                    type="email"
+                    required
+                    value="student@example.ac.th"
+                    placeholder="student@example.ac.th"
+                    class="font-en w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D39C4]/25 focus:border-[#1D39C4] transition"
+                  />
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label class="block text-sm font-medium text-slate-700">รหัสผ่าน</label>
+                    <button type="button" onclick="showToast('ระบบส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลนักศึกษาแล้ว')" class="text-xs text-[#1D39C4] hover:underline">
+                      ลืมรหัสผ่าน?
+                    </button>
+                  </div>
+                  <input
+                    type="password"
+                    required
+                    value="cpe2026demo"
+                    placeholder="••••••••"
+                    class="font-en w-full px-4 py-2.5 rounded-xl border border-slate-300 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D39C4]/25 focus:border-[#1D39C4] transition"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-full py-3 px-4 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm shadow-sm transition cursor-pointer mt-2"
+                >
+                  เข้าสู่ระบบ
+                </button>
+              </form>
+
+              <div class="mt-5 text-center">
+                <p class="text-sm text-slate-600">
+                  ยังไม่มีบัญชี?
+                  <button type="button" onclick="openRegisterModal()" class="font-semibold text-[#1D39C4] hover:underline ml-1">
+                    สมัครใช้งาน
+                  </button>
+                </p>
+              </div>
+
+              <div class="my-6 border-t border-slate-100"></div>
+
+              <button
+                type="button"
+                onclick="navigateTo('screen-7')"
+                class="w-full py-2.5 px-4 rounded-xl border border-slate-300 hover:border-[#0A1647] bg-slate-50 hover:bg-[#0A1647]/5 text-slate-700 hover:text-[#0A1647] font-medium text-sm transition flex items-center justify-center gap-2"
+              >
+                <svg class="w-4 h-4 text-[#0A1647]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                เข้าสำหรับอาจารย์/ผู้ดูแลระบบ
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 2: หน้าหลักนักศึกษา (Student Dashboard)
+         ********************************************************* -->
+    <section id="screen-2" class="screen-view space-y-8">
+      <!-- Greeting Header -->
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#0A1647]">สวัสดี สมชาย</h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-1">
+          เริ่มจากสิ่งที่คุณเคยทำ ระบบจะช่วยหาทักษะและสายงานที่น่าลองให้
+        </p>
+      </div>
+
+      <!-- 3-Card Stepper: ขั้นตอนของคุณ -->
+      <div class="space-y-3">
+        <h2 class="text-base font-semibold text-[#0A1647]">ขั้นตอนของคุณ</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <!-- Step 1 Card -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#3FA34D]/12 text-[#3FA34D]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#3FA34D]"></span>
+                ขั้นที่ 1 - ทำแล้ว
+              </span>
+              <h3 class="text-lg font-bold text-[#0A1647] mt-3">เล่าโปรเจกต์</h3>
+              <p id="dash-step1-summary" class="text-sm text-slate-600 mt-1">
+                เล่าไปแล้ว 2 โปรเจกต์ ได้ทักษะ 5 อย่าง
+              </p>
+            </div>
+            <div class="mt-5">
+              <button
+                onclick="navigateTo('screen-3')"
+                class="w-full py-2.5 px-4 rounded-xl border border-[#1D39C4]/30 text-[#1D39C4] hover:bg-[#1D39C4]/5 font-semibold text-sm transition"
+              >
+                เพิ่มโปรเจกต์
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2 Card (Highlighted active step) -->
+          <div class="bg-white rounded-2xl border-2 border-[#1D39C4] p-5 flex flex-col justify-between shadow-md shadow-[#1D39C4]/5">
+            <div>
+              <span id="dash-step2-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#1D39C4]/10 text-[#1D39C4]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#1D39C4]"></span>
+                ขั้นที่ 2 - ทำต่อได้เลย
+              </span>
+              <h3 class="text-lg font-bold text-[#0A1647] mt-3">ตอบแบบสำรวจความสนใจ</h3>
+              <p class="text-sm text-slate-600 mt-1">
+                8 ข้อสั้นๆ ไม่มีถูกผิด ใช้เวลาไม่เกิน 3 นาที
+              </p>
+            </div>
+            <div class="mt-5">
+              <button
+                onclick="navigateTo('screen-4')"
+                class="w-full py-2.5 px-4 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm transition shadow-sm"
+              >
+                เริ่มทำแบบสำรวจ
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3 Card -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <span id="dash-step3-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+                ขั้นที่ 3 - ยังไม่เริ่ม
+              </span>
+              <h3 class="font-en text-lg font-bold text-[#0A1647] mt-3">Skill Gap</h3>
+              <p class="text-sm text-slate-600 mt-1">
+                เลือกสายงานที่สนใจ แล้วดูว่าทักษะไหนยังขาด
+              </p>
+            </div>
+            <div class="mt-5">
+              <button
+                onclick="navigateTo('screen-6')"
+                class="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:border-[#1D39C4] text-slate-700 hover:text-[#1D39C4] font-medium text-sm transition"
+              >
+                ดูตัวอย่างผลวิเคราะห์
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bottom 2-Column Grid: My Skills & My Projects -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: ทักษะของฉัน -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-[#0A1647]">ทักษะของฉัน</h2>
+            <span id="dash-skill-count-pill" class="px-3 py-1 rounded-full text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">
+              5 ทักษะ
+            </span>
+          </div>
+
+          <div id="dash-skills-list" class="divide-y divide-slate-100">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- Right: ผลงานของฉัน -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-[#0A1647]">ผลงานของฉัน</h2>
+            <button
+              onclick="navigateTo('screen-3')"
+              class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#A8D1FA]/35 hover:bg-[#A8D1FA]/60 text-[#0A1647] text-xs font-semibold transition"
+            >
+              <span class="text-base leading-none">+</span> เพิ่ม
+            </button>
+          </div>
+
+          <div id="dash-projects-list" class="space-y-3">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 3: เล่าโปรเจกต์ที่เคยทำ (Project Story & AI Extraction)
+         ********************************************************* -->
+    <section id="screen-3" class="screen-view max-w-4xl mx-auto space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#0A1647]">เล่าโปรเจกต์ที่เคยทำ</h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-1">
+          เล่าด้วยภาษาง่ายๆ ได้เลย ไม่ต้องรู้ว่าสิ่งที่ทำเรียกว่าทักษะอะไร
+        </p>
+      </div>
+
+      <!-- Form Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-7 shadow-sm space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-slate-800 mb-1.5">ชื่อผลงาน</label>
+            <input
+              id="project-title-input"
+              type="text"
+              value="รถบังคับหลบสิ่งกีดขวาง"
+              class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1D39C4]/25 focus:border-[#1D39C4]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-800 mb-1.5">
+              ลิงก์ผลงาน <span class="text-slate-400 font-normal">(ไม่บังคับ)</span>
+            </label>
+            <input
+              id="project-link-input"
+              type="url"
+              placeholder="https://github.com/..."
+              class="font-en w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#1D39C4]/25 focus:border-[#1D39C4]"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-800 mb-1.5">เล่าให้ฟังหน่อยว่าทำอะไร</label>
+          <textarea
+            id="project-story-input"
+            rows="3"
+            class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm text-slate-800 leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#1D39C4]/25 focus:border-[#1D39C4]"
+          >ทำรถบังคับหลบสิ่งกีดขวาง ใช้บอร์ด ESP32 เขียนเงื่อนไขให้มอเตอร์หยุดตอนเจอเซนเซอร์</textarea>
+          <p class="text-xs text-slate-500 mt-1.5 flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-[#1D39C4] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            ไม่ต้องใส่ชื่อ รหัสนักศึกษา หรือข้อมูลส่วนตัว
+          </p>
+        </div>
+
+        <!-- Privacy Consent Checkbox -->
+        <label class="flex items-start gap-3 p-3.5 rounded-xl bg-[#A8D1FA]/20 border border-[#A8D1FA]/60 cursor-pointer">
+          <input
+            id="ai-consent-checkbox"
+            type="checkbox"
+            checked
+            class="mt-0.5 w-4 h-4 rounded text-[#1D39C4] border-slate-300 focus:ring-[#1D39C4]"
+          />
+          <span class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+            ยินยอมให้ส่งข้อความด้านบนไปยังบริการ AI เพื่อวิเคราะห์ทักษะ ระบบส่งเฉพาะข้อความนี้เท่านั้น
+          </span>
+        </label>
+
+        <div class="flex justify-end">
+          <button
+            id="btn-ai-analyze"
+            type="button"
+            onclick="runAiExtraction()"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm transition shadow-sm"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span>ให้ AI ช่วยหาทักษะ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- AI Extraction Result Card -->
+      <div id="ai-extraction-card" class="bg-white rounded-2xl border-2 border-[#7393FF]/50 p-5 sm:p-7 shadow-sm space-y-5 transition-opacity">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#3FA34D]"></span>
+              <h2 class="text-lg font-bold text-[#0A1647]">AI พบทักษะเหล่านี้ในสิ่งที่คุณเล่า</h2>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              AI เลือกจากคลังทักษะของระบบเท่านั้น ติ๊กเฉพาะอันที่ตรงกับสิ่งที่คุณทำจริง
+            </p>
+          </div>
+          <span class="font-en text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#0A1647] text-white self-start sm:self-center">
+            Controlled Vocabulary
+          </span>
+        </div>
+
+        <!-- Extracted Skills Checklist -->
+        <div id="extracted-skills-container" class="space-y-3">
+          <!-- Item 1: Microcontroller -->
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl border border-slate-200 hover:border-[#1D39C4] bg-slate-50/50 cursor-pointer transition">
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked
+                data-skill-name="Microcontroller"
+                data-skill-level="ปานกลาง"
+                onchange="updateSaveSkillCounter()"
+                class="extracted-skill-cb mt-1 w-4 h-4 rounded text-[#1D39C4] focus:ring-[#1D39C4]"
+              />
+              <div>
+                <div class="font-en font-bold text-slate-900 text-sm sm:text-base">Microcontroller</div>
+                <div class="text-xs sm:text-sm text-slate-600 mt-0.5">
+                  จากประโยค: <span class="text-[#1D39C4] font-medium">“ใช้บอร์ด ESP32”</span>
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/50 text-[#0A1647] flex-shrink-0">
+              ปานกลาง
+            </span>
+          </label>
+
+          <!-- Item 2: Logic Control -->
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl border border-slate-200 hover:border-[#1D39C4] bg-slate-50/50 cursor-pointer transition">
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked
+                data-skill-name="Logic Control"
+                data-skill-level="พื้นฐาน"
+                onchange="updateSaveSkillCounter()"
+                class="extracted-skill-cb mt-1 w-4 h-4 rounded text-[#1D39C4] focus:ring-[#1D39C4]"
+              />
+              <div>
+                <div class="font-en font-bold text-slate-900 text-sm sm:text-base">Logic Control</div>
+                <div class="text-xs sm:text-sm text-slate-600 mt-0.5">
+                  จากประโยค: <span class="text-[#1D39C4] font-medium">“เขียนเงื่อนไขให้มอเตอร์หยุดตอนเจอเซนเซอร์”</span>
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-200/80 text-slate-700 flex-shrink-0">
+              พื้นฐาน
+            </span>
+          </label>
+
+          <!-- Item 3: Sensor Interfacing -->
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl border border-slate-200 hover:border-[#1D39C4] bg-slate-50/50 cursor-pointer transition">
+            <div class="flex items-start gap-3">
+              <input
+                type="checkbox"
+                checked
+                data-skill-name="Sensor Interfacing"
+                data-skill-level="พื้นฐาน"
+                onchange="updateSaveSkillCounter()"
+                class="extracted-skill-cb mt-1 w-4 h-4 rounded text-[#1D39C4] focus:ring-[#1D39C4]"
+              />
+              <div>
+                <div class="font-en font-bold text-slate-900 text-sm sm:text-base">Sensor Interfacing</div>
+                <div class="text-xs sm:text-sm text-slate-600 mt-0.5">
+                  จากประโยค: <span class="text-[#1D39C4] font-medium">“ตอนเจอเซนเซอร์”</span>
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-200/80 text-slate-700 flex-shrink-0">
+              พื้นฐาน
+            </span>
+          </label>
+
+          <!-- Item 4: C/C++ (Uncertain - Amber Badge) -->
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl border border-amber-300/80 hover:border-amber-500 bg-amber-50/40 cursor-pointer transition">
+            <div class="flex items-start gap-3">
+              <input
+                id="cb-cpp-uncertain"
+                type="checkbox"
+                data-skill-name="C/C++"
+                data-skill-level="ปานกลาง"
+                onchange="updateSaveSkillCounter()"
+                class="extracted-skill-cb mt-1 w-4 h-4 rounded text-[#1D39C4] focus:ring-[#1D39C4]"
+              />
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-en font-bold text-slate-900 text-sm sm:text-base">C/C++</span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                    AI ไม่แน่ใจ
+                  </span>
+                </div>
+                <div class="text-xs sm:text-sm text-slate-600 mt-1">
+                  ข้อความไม่ได้บอกว่าใช้ภาษาอะไร ติ๊กเองถ้าคุณใช้ภาษานี้จริง <span class="text-xs text-[#1D39C4]">(ติ๊กแล้วคะแนน Skill Gap สาย Embedded จะอัปเดตทันที)</span>
+                </div>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-100/80 text-amber-900 flex-shrink-0">
+              ปานกลาง
+            </span>
+          </label>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onclick="navigateTo('screen-2')"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium text-sm transition"
+          >
+            ยกเลิก
+          </button>
+          <button
+            id="btn-save-extracted-skills"
+            type="button"
+            onclick="saveExtractedSkills()"
+            class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm shadow-sm transition"
+          >
+            บันทึก 3 ทักษะ
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 4: แบบสำรวจความสนใจ (8-Question Interest Survey)
+         ********************************************************* -->
+    <section id="screen-4" class="screen-view max-w-3xl mx-auto space-y-6">
+      <!-- Survey Header & Progress -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm space-y-6">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <h1 class="text-xl sm:text-2xl font-bold text-[#0A1647]">แบบสำรวจความสนใจ</h1>
+            <span id="survey-step-label" class="text-sm font-semibold text-[#1D39C4] bg-[#A8D1FA]/35 px-3 py-1 rounded-full">
+              ข้อ 3 จาก 8
+            </span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div id="survey-progress-bar" class="h-full bg-[#1D39C4] rounded-full transition-all duration-300" style="width: 37.5%;"></div>
+          </div>
+
+          <!-- Mini Step Dots -->
+          <div id="survey-dots" class="flex items-center justify-between pt-1">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Question Text -->
+        <div class="pt-2">
+          <h2 id="survey-question-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
+            เวลาเจอ Bug คุณชอบทำแบบไหนมากกว่า?
+          </h2>
+        </div>
+
+        <!-- 4 Radio Options -->
+        <div id="survey-options-container" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+          <button
+            id="btn-survey-prev"
+            type="button"
+            onclick="prevSurveyQuestion()"
+            class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium text-sm transition"
+          >
+            ย้อนกลับ
+          </button>
+
+          <button
+            id="btn-survey-next"
+            type="button"
+            onclick="nextSurveyQuestion()"
+            class="px-6 py-2.5 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm shadow-sm transition"
+          >
+            ข้อถัดไป
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Disclaimer Note -->
+      <p class="text-center text-xs sm:text-sm text-slate-500">
+        ไม่มีคำตอบถูกหรือผิด เลือกอันที่ใกล้กับที่คุณทำจริงมากที่สุด ผลที่ได้เป็นแค่จุดเริ่มต้นให้ลองสำรวจ
+      </p>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 5: สายงานที่น่าลองดูสำหรับคุณ (Career Recommendations)
+         ********************************************************* -->
+    <section id="screen-5" class="screen-view space-y-6">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#0A1647]">สายงานที่น่าลองดูสำหรับคุณ</h1>
+        <p class="text-sm sm:text-base text-slate-600 mt-1">
+          จากคำตอบ 8 ข้อและทักษะที่คุณมี ผลนี้ไม่ใช่คำตัดสิน เลือกสายที่สนใจเพื่อดูว่าต้องเตรียมอะไรเพิ่ม
+        </p>
+      </div>
+
+      <!-- Top 2-Column Row (Rank 1 & Rank 2) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Rank 1 Card (Featured Royal Blue Border) -->
+        <div class="bg-white rounded-2xl border-2 border-[#1D39C4] p-6 shadow-md shadow-[#1D39C4]/5 flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#0A1647] text-white">
+                อันดับ 1
+              </span>
+              <span class="text-xs font-semibold text-[#1D39C4]">แนะนำสูงสุด</span>
+            </div>
+
+            <div>
+              <h2 class="font-en text-2xl font-extrabold text-[#0A1647]">Embedded / IoT Engineer</h2>
+              <!-- 3/3 Match Indicator Bars -->
+              <div class="flex items-center gap-3 mt-2.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                  <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                  <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                </div>
+                <span class="text-xs sm:text-sm font-semibold text-[#1D39C4]">เข้ากับคำตอบของคุณมาก</span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทำไมถึงแนะนำ</div>
+              <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                <li>คุณเลือกว่าชอบตรวจหาปัญหาที่ฮาร์ดแวร์</li>
+                <li>โปรเจกต์ที่เล่าใช้บอร์ดและเซนเซอร์</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทักษะที่คุณมีแล้ว</div>
+              <div id="rec-rank1-skills" class="flex flex-wrap gap-2">
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">Microcontroller</span>
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">Logic Control</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onclick="openSkillGapForCareer('Embedded / IoT Engineer')"
+            class="w-full py-3 px-4 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm shadow-sm transition"
+          >
+            ดู Skill Gap สายนี้
+          </button>
+        </div>
+
+        <!-- Rank 2 Card -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#A8D1FA]/60 text-[#0A1647]">
+                อันดับ 2
+              </span>
+            </div>
+
+            <div>
+              <h2 class="font-en text-2xl font-extrabold text-[#0A1647]">Backend Developer</h2>
+              <!-- 2/3 Match Indicator Bars -->
+              <div class="flex items-center gap-3 mt-2.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                  <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                  <span class="w-7 h-2 rounded-full bg-slate-200"></span>
+                </div>
+                <span class="text-xs sm:text-sm font-semibold text-slate-700">เข้ากับคำตอบของคุณปานกลาง</span>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทำไมถึงแนะนำ</div>
+              <ul class="text-sm text-slate-700 space-y-1 list-disc list-inside">
+                <li>คุณเลือกว่าชอบดู log และหาจุดที่ระบบช้า</li>
+                <li>เคยทำเว็บที่ใช้ฐานข้อมูล</li>
+              </ul>
+            </div>
+
+            <div class="space-y-2">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทักษะที่คุณมีแล้ว</div>
+              <div class="flex flex-wrap gap-2">
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">Python</span>
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">SQL</span>
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">Git</span>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onclick="openSkillGapForCareer('Backend Developer')"
+            class="w-full py-3 px-4 rounded-xl border border-[#1D39C4] text-[#1D39C4] hover:bg-[#1D39C4]/5 font-semibold text-sm transition"
+          >
+            ดู Skill Gap สายนี้
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Rank 3 Card (Full Width) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+        <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+          <div class="space-y-3">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-[#A8D1FA]/50 text-[#0A1647]">
+              อันดับ 3
+            </span>
+            <h2 class="font-en text-2xl font-extrabold text-[#0A1647]">DevOps Engineer</h2>
+            <!-- 1/3 Match Indicator Bars -->
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5">
+                <span class="w-7 h-2 rounded-full bg-[#1D39C4]"></span>
+                <span class="w-7 h-2 rounded-full bg-slate-200"></span>
+                <span class="w-7 h-2 rounded-full bg-slate-200"></span>
+              </div>
+              <span class="text-xs sm:text-sm font-semibold text-slate-600">เข้ากับคำตอบของคุณน้อย</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 md:min-w-[420px]">
+            <div class="space-y-1.5">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทำไมถึงแนะนำ</div>
+              <ul class="text-sm text-slate-700 list-disc list-inside">
+                <li>คุณเลือกว่าชอบดูว่าระบบส่วนไหนตอบสนองช้า</li>
+              </ul>
+            </div>
+            <div class="space-y-2">
+              <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide">ทักษะที่คุณมีแล้ว</div>
+              <div class="flex flex-wrap gap-2">
+                <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">Git</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          onclick="openSkillGapForCareer('DevOps Engineer')"
+          class="w-full py-3 px-4 rounded-xl border border-slate-300 hover:border-[#1D39C4] text-[#1D39C4] hover:bg-[#1D39C4]/5 font-semibold text-sm transition"
+        >
+          ดู Skill Gap สายนี้
+        </button>
+      </div>
+
+      <!-- Bottom Action Banner -->
+      <div class="bg-[#A8D1FA]/25 border border-[#A8D1FA]/70 rounded-2xl p-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs sm:text-sm text-slate-700">
+          ผลนี้คำนวณจากคำตอบแบบสำรวจกับทักษะที่คุณยืนยันไว้ ถ้าไม่ตรงกับความรู้สึก ลองตอบใหม่หรือเพิ่มโปรเจกต์ได้
+        </p>
+        <div class="flex items-center gap-4 flex-shrink-0">
+          <button onclick="navigateTo('screen-4')" class="text-sm font-semibold text-[#1D39C4] underline hover:text-[#0A1647]">
+            ทำแบบสำรวจใหม่
+          </button>
+          <button onclick="navigateTo('screen-3')" class="text-sm font-semibold text-[#1D39C4] underline hover:text-[#0A1647]">
+            เพิ่มโปรเจกต์
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 6: วิเคราะห์ Skill Gap (Skill Gap Analysis)
+         ********************************************************* -->
+    <section id="screen-6" class="screen-view space-y-6">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 id="sg-career-heading" class="font-en text-2xl sm:text-3xl font-bold text-[#0A1647]">
+            Skill Gap: Embedded / IoT Engineer
+          </h1>
+          <p class="text-sm sm:text-base text-slate-600 mt-1">
+            เทียบทักษะที่คุณมีกับเกณฑ์ของสายงานนี้
+          </p>
+        </div>
+
+        <!-- Quick Career Selector Pill -->
+        <div class="flex items-center gap-2 bg-white border border-slate-200 rounded-xl p-1 self-start">
+          <button onclick="openSkillGapForCareer('Embedded / IoT Engineer')" id="sg-pill-embedded" class="font-en px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1D39C4] text-white transition">
+            Embedded / IoT
+          </button>
+          <button onclick="openSkillGapForCareer('Backend Developer')" id="sg-pill-backend" class="font-en px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+            Backend
+          </button>
+          <button onclick="openSkillGapForCareer('DevOps Engineer')" id="sg-pill-devops" class="font-en px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+            DevOps
+          </button>
+        </div>
+      </div>
+
+      <!-- Top 2 Metric Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Card: ความพร้อมเบื้องต้น -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <div class="text-sm font-semibold text-slate-500">ความพร้อมเบื้องต้น</div>
+            <div class="flex items-baseline gap-3 mt-2">
+              <span id="sg-readiness-percent" class="font-en text-5xl font-extrabold text-[#1D39C4]">57%</span>
+              <span class="text-sm font-medium text-slate-600">ของเกณฑ์สายงานนี้</span>
+            </div>
+
+            <!-- Status Breakdown Pills -->
+            <div id="sg-status-pills" class="flex flex-wrap items-center gap-2 mt-4">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#3FA34D]/12 text-[#3FA34D]">ครบแล้ว 3</span>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">ยังไม่ถึงเกณฑ์ 1</span>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">ยังไม่มี 2</span>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 leading-relaxed pt-3 border-t border-slate-100">
+            คิดจากระดับทักษะของคุณเทียบระดับขั้นต่ำของสายงาน โดยทักษะที่จำเป็นมีน้ำหนักมากกว่าทักษะเสริม เป็นการประมาณเพื่อเริ่มต้น ไม่ใช่การประเมินอย่างเป็นทางการ
+          </p>
+        </div>
+
+        <!-- Right Card: พัฒนาการของคุณในสายนี้ -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="text-sm font-semibold text-slate-500">พัฒนาการของคุณในสายนี้</div>
+            <span id="sg-history-career-tag" class="font-en text-xs font-semibold text-[#0A1647] bg-[#A8D1FA]/40 px-2.5 py-1 rounded-lg">
+              Embedded / IoT Engineer
+            </span>
+          </div>
+
+          <!-- Progression Visual Bar/Node Chart -->
+          <div class="grid grid-cols-3 gap-4 items-end pt-4 pb-2 px-2">
+            <!-- Attempt 1 -->
+            <div class="flex flex-col items-center gap-2">
+              <span id="sg-hist-1-val" class="font-en text-sm font-bold text-slate-500">41%</span>
+              <div class="w-full max-w-[64px] h-24 bg-slate-100 rounded-xl flex items-end p-1">
+                <div id="sg-hist-1-bar" class="w-full bg-[#A8D1FA] rounded-lg transition-all duration-500" style="height: 41%;"></div>
+              </div>
+              <span class="text-xs font-medium text-slate-500">ครั้งที่ 1</span>
+            </div>
+
+            <!-- Attempt 2 -->
+            <div class="flex flex-col items-center gap-2">
+              <span id="sg-hist-2-val" class="font-en text-sm font-bold text-[#1D39C4]">49%</span>
+              <div class="w-full max-w-[64px] h-24 bg-slate-100 rounded-xl flex items-end p-1">
+                <div id="sg-hist-2-bar" class="w-full bg-[#7393FF] rounded-lg transition-all duration-500" style="height: 49%;"></div>
+              </div>
+              <span class="text-xs font-medium text-slate-600">ครั้งที่ 2</span>
+            </div>
+
+            <!-- Current Attempt -->
+            <div class="flex flex-col items-center gap-2">
+              <span id="sg-hist-3-val" class="font-en text-base font-extrabold text-[#1D39C4]">57%</span>
+              <div class="w-full max-w-[64px] h-24 bg-[#1D39C4]/10 rounded-xl flex items-end p-1 ring-2 ring-[#1D39C4]/30">
+                <div id="sg-hist-3-bar" class="w-full bg-[#1D39C4] rounded-lg transition-all duration-500" style="height: 57%;"></div>
+              </div>
+              <span class="text-xs font-bold text-[#0A1647]">ครั้งนี้</span>
+            </div>
+          </div>
+
+          <p class="text-xs text-slate-500 pt-3 border-t border-slate-100">
+            ระบบเก็บผลทุกครั้งที่วิเคราะห์ เพื่อให้คุณเทียบกับตัวเองในอดีตได้
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Skill Requirements Table Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h2 class="text-base sm:text-lg font-bold text-[#0A1647]">ทักษะที่สายงานนี้ต้องการ</h2>
+          <span class="text-xs text-slate-500">เปรียบเทียบรายทักษะ</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">
+                <th class="py-3.5 px-6">ทักษะ</th>
+                <th class="py-3.5 px-4">ความสำคัญ</th>
+                <th class="py-3.5 px-4">ระดับที่ต้องการ</th>
+                <th class="py-3.5 px-4">ระดับของคุณ</th>
+                <th class="py-3.5 px-6 text-right">สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="sg-skills-table-body" class="divide-y divide-slate-100 text-sm">
+              <!-- Populated dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="px-6 py-3 bg-slate-50/70 border-t border-slate-100 text-xs text-slate-500">
+          เกณฑ์สายงานตั้งโดยอาจารย์ อ้างอิงจากประกาศรับสมัครงานที่ทีมรวบรวม (24 ประกาศจาก JobsDB, LinkedIn และ Blognone Jobs)
+        </div>
+      </div>
+
+      <!-- AI Summary & Actionable Recommendations Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 class="text-lg font-bold text-[#0A1647]">สรุปและคำแนะนำจาก AI</h2>
+          <span class="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+            AI ได้รับเฉพาะชื่อสายงาน ทักษะ และระดับ ไม่ได้รับข้อมูลส่วนตัวของคุณ
+          </span>
+        </div>
+
+        <p id="sg-ai-paragraph" class="text-sm sm:text-base text-slate-700 leading-relaxed">
+          คุณมีพื้นฐานด้านไมโครคอนโทรลเลอร์และเซนเซอร์ครบตามเกณฑ์แล้ว ช่องว่างหลักของสายนี้คือภาษา <strong class="font-en text-[#0A1647]">C/C++</strong> ซึ่งเป็นทักษะจำเป็นและคุณยังไม่ได้ระบุไว้ ถ้าคุณเคยใช้ภาษานี้กับบอร์ดจริง ลองกลับไปเพิ่มในโปรเจกต์ก่อน คะแนนจะเปลี่ยนทันที
+        </p>
+
+        <div class="bg-[#F8FAFC] rounded-xl border border-slate-200/80 p-4 space-y-2.5">
+          <div class="text-sm font-bold text-[#0A1647]">ลองเริ่มจาก</div>
+          <ol id="sg-ai-steps" class="text-sm text-slate-700 space-y-1.5 list-decimal list-inside">
+            <li>ยืนยันว่าเคยใช้ <span class="font-en font-semibold">C/C++</span> ในโปรเจกต์ที่ผ่านมาหรือไม่</li>
+            <li>ฝึกเขียนโปรแกรมควบคุมเงื่อนไขที่ซับซ้อนขึ้นให้ถึงระดับปานกลาง</li>
+            <li>ศึกษาพื้นฐาน <span class="font-en font-semibold">RTOS</span> แล้วลองกับบอร์ดที่มีอยู่</li>
+          </ol>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <button
+            onclick="navigateTo('screen-3')"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#1D39C4] hover:bg-[#0A1647] text-white font-semibold text-sm transition shadow-sm"
+          >
+            เพิ่มโปรเจกต์เพื่ออัปเดตทักษะ
+          </button>
+          <button
+            onclick="navigateTo('screen-5')"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 hover:border-[#1D39C4] text-slate-700 hover:text-[#1D39C4] font-medium text-sm transition"
+          >
+            เลือกสายงานอื่น
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- *********************************************************
+         SCREEN 7: หน้าอาจารย์ / ผู้ดูแลระบบ (Teacher / Admin Dashboard)
+         ********************************************************* -->
+    <section id="screen-7" class="screen-view space-y-8">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-[#0A1647]">ภาพรวมทักษะของนักศึกษา</h1>
+          <p class="text-sm sm:text-base text-slate-600 mt-1">
+            ใช้ดูว่านักศึกษาเก่งอะไร ขาดอะไร เพื่อปรับการสอนและวิชาเลือกให้ตรงจุด
+          </p>
+        </div>
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647] self-start">
+          ข้อมูลตัวอย่าง
+        </span>
+      </div>
+
+      <!-- 4 KPI Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="text-xs sm:text-sm font-medium text-slate-500">นักศึกษาในระบบ</div>
+          <div class="font-en text-3xl sm:text-4xl font-extrabold text-[#0A1647] mt-2">48</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="text-xs sm:text-sm font-medium text-slate-500">วิเคราะห์ Skill Gap แล้ว</div>
+          <div class="font-en text-3xl sm:text-4xl font-extrabold text-[#1D39C4] mt-2">31</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="text-xs sm:text-sm font-medium text-slate-500">สายงานในระบบ</div>
+          <div class="font-en text-3xl sm:text-4xl font-extrabold text-[#0A1647] mt-2">5</div>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+          <div class="text-xs sm:text-sm font-medium text-slate-500">ทักษะในคลัง</div>
+          <div class="font-en text-3xl sm:text-4xl font-extrabold text-[#3FA34D] mt-2">36</div>
+        </div>
+      </div>
+
+      <!-- 2-Column Analytics -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left: Top Student Skills -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+          <div>
+            <h2 class="text-lg font-bold text-[#0A1647]">ทักษะที่นักศึกษามีมากที่สุด</h2>
+            <p class="text-xs text-slate-500 mt-0.5">จำนวนนักศึกษาที่มีทักษะนั้น จากทั้งหมด 48 คน</p>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Python -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-sm">
+                <span class="font-en font-semibold text-slate-800">Python</span>
+                <span class="font-semibold text-[#1D39C4]">38 คน</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-[#1D39C4] rounded-full" style="width: 79%;"></div>
+              </div>
+            </div>
+
+            <!-- Git -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-sm">
+                <span class="font-en font-semibold text-slate-800">Git</span>
+                <span class="font-semibold text-[#1D39C4]">33 คน</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-[#1D39C4] rounded-full" style="width: 69%;"></div>
+              </div>
+            </div>
+
+            <!-- SQL -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-sm">
+                <span class="font-en font-semibold text-slate-800">SQL</span>
+                <span class="font-semibold text-[#7393FF]">27 คน</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-[#7393FF] rounded-full" style="width: 56%;"></div>
+              </div>
+            </div>
+
+            <!-- C/C++ -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-sm">
+                <span class="font-en font-semibold text-slate-800">C/C++</span>
+                <span class="font-semibold text-[#7393FF]">21 คน</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-[#7393FF] rounded-full" style="width: 44%;"></div>
+              </div>
+            </div>
+
+            <!-- HTML/CSS -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-sm">
+                <span class="font-en font-semibold text-slate-800">HTML/CSS</span>
+                <span class="font-semibold text-slate-600">18 คน</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-[#A8D1FA] rounded-full" style="width: 38%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Most Missing Skills per Career -->
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+          <div>
+            <h2 class="text-lg font-bold text-[#0A1647]">ทักษะที่ขาดบ่อยที่สุดในแต่ละสายงาน</h2>
+            <p class="text-xs text-slate-500 mt-0.5">นับจากผลวิเคราะห์ทุกครั้งที่นักศึกษาทำ</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500">
+                  <th class="py-2.5 pr-3">สายงาน</th>
+                  <th class="py-2.5 px-3">ทักษะที่ขาดบ่อยสุด</th>
+                  <th class="py-2.5 px-3 text-right">ครั้ง</th>
+                  <th class="py-2.5 pl-3 text-right">Match เฉลี่ย</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-sm">
+                <tr>
+                  <td class="py-3 pr-3 font-en font-semibold text-[#0A1647]">Embedded / IoT</td>
+                  <td class="py-3 px-3 font-en text-rose-600 font-medium">C/C++</td>
+                  <td class="py-3 px-3 font-en text-right text-slate-600">14</td>
+                  <td class="py-3 pl-3 font-en text-right font-bold text-[#1D39C4]">52%</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-3 font-en font-semibold text-[#0A1647]">Backend</td>
+                  <td class="py-3 px-3 font-en text-rose-600 font-medium">REST API</td>
+                  <td class="py-3 px-3 font-en text-right text-slate-600">11</td>
+                  <td class="py-3 pl-3 font-en text-right font-bold text-[#1D39C4]">61%</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-3 font-en font-semibold text-[#0A1647]">DevOps</td>
+                  <td class="py-3 px-3 font-en text-rose-600 font-medium">Linux</td>
+                  <td class="py-3 px-3 font-en text-right text-slate-600">9</td>
+                  <td class="py-3 pl-3 font-en text-right font-bold text-amber-600">38%</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-3 font-en font-semibold text-[#0A1647]">Frontend</td>
+                  <td class="py-3 px-3 font-en text-rose-600 font-medium">JavaScript</td>
+                  <td class="py-3 px-3 font-en text-right text-slate-600">7</td>
+                  <td class="py-3 pl-3 font-en text-right font-bold text-[#3FA34D]">66%</td>
+                </tr>
+                <tr>
+                  <td class="py-3 pr-3 font-en font-semibold text-[#0A1647]">Data</td>
+                  <td class="py-3 px-3 font-en text-rose-600 font-medium">Pandas</td>
+                  <td class="py-3 px-3 font-en text-right text-slate-600">6</td>
+                  <td class="py-3 pl-3 font-en text-right font-bold text-[#1D39C4]">47%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Section: จัดการข้อมูลตั้งต้น (3 Master Data Cards) -->
+      <div class="space-y-3">
+        <h2 class="text-lg font-bold text-[#0A1647]">จัดการข้อมูลตั้งต้น</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: คลังทักษะ -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <h3 class="text-base font-bold text-[#0A1647]">คลังทักษะ</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                เพิ่ม แก้ไข ลบทักษะ และจัดหมวดหมู่ เช่น Software, Network, Embedded
+              </p>
+            </div>
+            <button
+              onclick="openTeacherModal('skills')"
+              class="mt-5 w-full py-2.5 px-4 rounded-xl border border-[#1D39C4]/40 text-[#1D39C4] hover:bg-[#1D39C4] hover:text-white font-semibold text-sm transition"
+            >
+              จัดการทักษะ
+            </button>
+          </div>
+
+          <!-- Card 2: สายงานและเกณฑ์ -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <h3 class="text-base font-bold text-[#0A1647]">สายงานและเกณฑ์</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                กำหนดทักษะที่แต่ละสายงานต้องการ พร้อมระดับความสำคัญและระดับขั้นต่ำ
+              </p>
+            </div>
+            <button
+              onclick="openTeacherModal('careers')"
+              class="mt-5 w-full py-2.5 px-4 rounded-xl border border-[#1D39C4]/40 text-[#1D39C4] hover:bg-[#1D39C4] hover:text-white font-semibold text-sm transition"
+            >
+              จัดการสายงาน
+            </button>
+          </div>
+
+          <!-- Card 3: แบบสำรวจความสนใจ -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <h3 class="text-base font-bold text-[#0A1647]">แบบสำรวจความสนใจ</h3>
+              <p class="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+                แก้คำถาม ตัวเลือก และคะแนนที่แต่ละตัวเลือกให้แก่สายงาน
+              </p>
+            </div>
+            <button
+              onclick="openTeacherModal('survey')"
+              class="mt-5 w-full py-2.5 px-4 rounded-xl border border-[#1D39C4]/40 text-[#1D39C4] hover:bg-[#1D39C4] hover:text-white font-semibold text-sm transition"
+            >
+              จัดการแบบสำรวจ
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================
+       FLOATING QUICK PROTOTYPE SCREEN SWITCHER (7 SCREENS)
+       ========================================================= -->
+  <div class="fixed bottom-3 left-1/2 -translate-x-1/2 z-40 max-w-[96vw]">
+    <div class="bg-[#0A1647]/95 backdrop-blur text-white px-2.5 py-1.5 rounded-full shadow-xl border border-white/15 flex items-center gap-1 overflow-x-auto text-xs">
+      <span class="font-en text-[10px] uppercase tracking-wider text-[#A8D1FA] font-bold px-2 hidden sm:inline">
+        Wireframes:
+      </span>
+      <button data-jump="screen-1" onclick="navigateTo('screen-1')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap bg-[#1D39C4] text-white transition">1. เข้าสู่ระบบ</button>
+      <button data-jump="screen-2" onclick="navigateTo('screen-2')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-slate-300 hover:text-white transition">2. หน้าหลัก</button>
+      <button data-jump="screen-3" onclick="navigateTo('screen-3')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-slate-300 hover:text-white transition">3. เล่าโปรเจกต์</button>
+      <button data-jump="screen-4" onclick="navigateTo('screen-4')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-slate-300 hover:text-white transition">4. แบบสำรวจ</button>
+      <button data-jump="screen-5" onclick="navigateTo('screen-5')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-slate-300 hover:text-white transition">5. สายงาน</button>
+      <button data-jump="screen-6" onclick="navigateTo('screen-6')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-slate-300 hover:text-white transition">6. Skill Gap</button>
+      <button data-jump="screen-7" onclick="navigateTo('screen-7')" class="jump-pill px-2.5 py-1 rounded-full font-medium whitespace-nowrap text-[#A8D1FA] hover:text-white transition">7. อาจารย์</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CUSTOM MODAL DIALOG (Teacher Management / Register)
+       ========================================================= -->
+  <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 id="modal-title" class="text-lg font-bold text-[#0A1647]">หัวข้อ</h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center">✕</button>
+      </div>
+      <div id="modal-body" class="text-sm text-slate-700 space-y-3 max-h-[65vh] overflow-y-auto">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50">
+          ปิดหน้าต่าง
+        </button>
+        <button id="modal-primary-btn" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-[#1D39C4] text-white text-sm font-semibold hover:bg-[#0A1647]">
+          บันทึกการเปลี่ยนแปลง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       TOAST NOTIFICATION (Replaces alert())
+       ========================================================= -->
+  <div id="toast-banner" class="fixed top-20 right-4 z-50 transform translate-x-[130%] transition-transform duration-300">
+    <div class="bg-[#0A1647] text-white px-4 py-3 rounded-xl shadow-lg border border-[#7393FF]/30 flex items-center gap-2.5 text-sm">
+      <span class="w-2 h-2 rounded-full bg-[#3FA34D]"></span>
+      <span id="toast-message">บันทึกข้อมูลเรียบร้อย</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       INTERACTIVE PROTOTYPE SCRIPT
+       ========================================================= -->
+  <script>
+    // ---------------------------------------------------------
+    // 1. CENTRAL PROTOTYPE STATE
+    // ---------------------------------------------------------
+    const appState = {
+      currentScreen: 'screen-1',
+      selectedCareer: 'Embedded / IoT Engineer',
+      surveyCompleted: false,
+      currentQuestionIdx: 2, // Start at Question 3 (index 2) as shown in Wireframe Screen 4
+      skills: [
+        { name: 'Microcontroller', level: 'ปานกลาง', source: 'AI สกัด' },
+        { name: 'Logic Control', level: 'พื้นฐาน', source: 'AI สกัด' },
+        { name: 'Python', level: 'ปานกลาง', source: 'AI สกัด' },
+        { name: 'SQL', level: 'พื้นฐาน', source: 'AI สกัด' },
+        { name: 'Git', level: 'พื้นฐาน', source: 'กรอกเอง' }
+      ],
+      projects: [
+        {
+          title: 'รถบังคับหลบสิ่งกีดขวาง',
+          skills: ['Microcontroller', 'Logic Control']
+        },
+        {
+          title: 'เว็บจองห้องเรียน',
+          skills: ['Python', 'SQL', 'Git']
+        }
+      ]
+    };
+
+    // 8-Question Realistic Computer Engineering Interest Survey
+    const surveyQuestions = [
+      {
+        q: 'เวลาเริ่มทำโปรเจกต์กลุ่ม คุณมักอาสารับผิดชอบส่วนไหนก่อน?',
+        options: [
+          'ออกแบบวงจร ต่อบอร์ด และทดสอบเซนเซอร์จริง',
+          'วางโครงสร้างฐานข้อมูลและเขียน API หลังบ้าน',
+          'ตั้งค่า Server, Docker และระบบ Deploy อัตโนมัติ',
+          'ออกแบบหน้าจอ UI และปรับประสบการณ์ผู้ใช้'
+        ],
+        selected: 0
+      },
+      {
+        q: 'วิชาแล็บแบบไหนที่ทำให้คุณรู้สึกสนุกและลืมเวลาได้มากที่สุด?',
+        options: [
+          'แล็บไมโครคอนโทรลเลอร์ที่เห็นมอเตอร์หรือไฟทำงานตามโค้ด',
+          'แล็บออกแบบระบบฐานข้อมูลและจัดการข้อมูลขนาดใหญ่',
+          'แล็บระบบปฏิบัติการ Linux และเครือข่ายคอมพิวเตอร์',
+          'แล็บพัฒนาเว็บแอปพลิเคชันที่เห็นผลลัพธ์บนหน้าจอทันที'
+        ],
+        selected: 0
+      },
+      {
+        q: 'เวลาเจอ Bug คุณชอบทำแบบไหนมากกว่า?',
+        options: [
+          'นั่งไล่โค้ดทีละบรรทัดจนเจอจุดผิด',
+          'ลองวัดและตรวจดูว่าฮาร์ดแวร์ตัวไหนมีปัญหา',
+          'ดู log และเช็กว่าระบบส่วนไหนตอบสนองช้า',
+          'ลองเปิดหน้าจอแล้วดูว่าผู้ใช้เห็นอะไรผิดปกติ'
+        ],
+        selected: 1 // Pre-selected per Wireframe Screen 4
+      },
+      {
+        q: 'ถ้าต้องเลือกอ่านบทความเทคโนโลยี 1 เรื่อง คุณจะกดอ่านเรื่องไหน?',
+        options: [
+          'การสื่อสารระหว่างชิปด้วยโปรโตคอล SPI / I2C และประหยัดพลังงาน',
+          'วิธีออกแบบ REST API ให้รองรับผู้ใช้งานพร้อมกันหลักหมื่นคน',
+          'เบื้องหลังการทำ CI/CD Pipeline และ Kubernetes บน Cloud',
+          'เทคนิคทำ Animation และ Responsive Design บนมือถือ'
+        ],
+        selected: 0
+      },
+      {
+        q: 'คุณรู้สึกภูมิใจกับผลลัพธ์แบบไหนมากที่สุด?',
+        options: [
+          'อุปกรณ์ IoT ที่วางใช้งานจริงนอกห้องแล็บได้เสถียร',
+          'ระบบหลังบ้านที่ประมวลผลถูกต้องแม่นยำและปลอดภัย',
+          'ระบบที่รันต่อเนื่อง 24 ชั่วโมงโดยไม่ล่มและกู้คืนเองได้',
+          'หน้าเว็บที่คนใช้งานชมว่าใช้ง่ายและสวยงาม'
+        ],
+        selected: 0
+      },
+      {
+        q: 'เครื่องมือแบบไหนที่คุณอยากฝึกใช้ให้คล่องมือมากขึ้น?',
+        options: [
+          'Oscilloscope, Logic Analyzer และ RTOS',
+          'PostgreSQL, Redis และ Framework ฝั่ง Server',
+          'Linux Command Line, Docker และ Cloud Infrastructure',
+          'React, Tailwind CSS และ Figma'
+        ],
+        selected: 0
+      },
+      {
+        q: 'หากต้องแก้ปัญหาเฉพาะหน้าตอนพรีเซนต์งาน คุณถนัดรับมือด้านไหน?',
+        options: [
+          'เช็กสายไฟ สัญญาณเซนเซอร์ และรีเซ็ตบอร์ดควบคุม',
+          'เช็กการเชื่อมต่อฐานข้อมูลและ Query ที่ส่งค่าผิด',
+          'เช็กสถานะเซิร์ฟเวอร์ พอร์ตเครือข่าย และ Environment',
+          'ปรับแก้หน้าจอแสดงผลและข้อความให้สื่อสารชัดเจน'
+        ],
+        selected: 0
+      },
+      {
+        q: 'ภาพการทำงานในอนาคตที่ใกล้เคียงกับตัวคุณมากที่สุดคือข้อใด?',
+        options: [
+          'วิศวกรที่พัฒนาสมองกลฝังตัวและอุปกรณ์อัจฉริยะ',
+          'นักพัฒนาที่สร้างตรรกะและโครงสร้างข้อมูลเบื้องหลังแอป',
+          'วิศวกรที่ดูแลโครงสร้างพื้นฐานและความเสถียรของระบบ',
+          'นักพัฒนาที่สร้างหน้าตาและลูกเล่นที่ผู้ใช้สัมผัสโดยตรง'
+        ],
+        selected: 0
+      }
+    ];
+
+    // Career Criteria Definitions for Screen 6
+    const careerDefinitions = {
+      'Embedded / IoT Engineer': {
+        history: [41, 49],
+        requirements: [
+          { skill: 'C/C++', importance: 'จำเป็น', required: 'ปานกลาง' },
+          { skill: 'Microcontroller', importance: 'จำเป็น', required: 'ปานกลาง' },
+          { skill: 'Sensor Interfacing', importance: 'จำเป็น', required: 'พื้นฐาน' },
+          { skill: 'Logic Control', importance: 'ควรมี', required: 'ปานกลาง' },
+          { skill: 'RTOS', importance: 'ควรมี', required: 'พื้นฐาน' },
+          { skill: 'Git', importance: 'เสริม', required: 'พื้นฐาน' }
+        ]
+      },
+      'Backend Developer': {
+        history: [45, 52],
+        requirements: [
+          { skill: 'Python', importance: 'จำเป็น', required: 'ปานกลาง' },
+          { skill: 'SQL', importance: 'จำเป็น', required: 'ปานกลาง' },
+          { skill: 'REST API', importance: 'จำเป็น', required: 'พื้นฐาน' },
+          { skill: 'Git', importance: 'ควรมี', required: 'พื้นฐาน' },
+          { skill: 'Docker', importance: 'เสริม', required: 'พื้นฐาน' }
+        ]
+      },
+      'DevOps Engineer': {
+        history: [25, 32],
+        requirements: [
+          { skill: 'Linux', importance: 'จำเป็น', required: 'ปานกลาง' },
+          { skill: 'Docker', importance: 'จำเป็น', required: 'พื้นฐาน' },
+          { skill: 'Git', importance: 'จำเป็น', required: 'พื้นฐาน' },
+          { skill: 'CI/CD', importance: 'ควรมี', required: 'พื้นฐาน' },
+          { skill: 'Python', importance: 'เสริม', required: 'พื้นฐาน' }
+        ]
+      }
+    };
+
+    const levelRank = { 'ยังไม่มี': 0, 'พื้นฐาน': 1, 'ปานกลาง': 2, 'เชี่ยวชาญ': 3 };
+    const importanceWeight = { 'จำเป็น': 3, 'ควรมี': 2, 'เสริม': 1 };
+
+    // ---------------------------------------------------------
+    // 2. NAVIGATION CONTROLLER
+    // ---------------------------------------------------------
+    function navigateTo(screenId) {
+      appState.currentScreen = screenId;
+
+      // Toggle visible section
+      document.querySelectorAll('.screen-view').forEach(sec => {
+        sec.classList.remove('active');
+      });
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add('active');
+
+      // Manage Navbar visibility & role mode
+      const navbar = document.getElementById('main-navbar');
+      const studentLinks = document.getElementById('student-nav-links');
+      const studentMobileNav = document.getElementById('student-mobile-nav');
+      const studentBadge = document.getElementById('student-user-badge');
+      const teacherLinks = document.getElementById('teacher-nav-links');
+      const teacherBadge = document.getElementById('teacher-user-badge');
+
+      if (screenId === 'screen-1') {
+        navbar.classList.add('hidden');
+      } else if (screenId === 'screen-7') {
+        navbar.classList.remove('hidden');
+        studentLinks.classList.add('hidden');
+        studentLinks.classList.remove('md:flex');
+        studentMobileNav.classList.add('hidden');
+        studentBadge.classList.add('hidden');
+        studentBadge.classList.remove('flex');
+
+        teacherLinks.classList.remove('hidden');
+        teacherLinks.classList.add('md:flex');
+        teacherBadge.classList.remove('hidden');
+        teacherBadge.classList.add('flex');
+      } else {
+        navbar.classList.remove('hidden');
+        studentLinks.classList.remove('hidden');
+        studentLinks.classList.add('md:flex');
+        studentMobileNav.classList.remove('hidden');
+        studentBadge.classList.remove('hidden');
+        studentBadge.classList.add('flex');
+
+        teacherLinks.classList.add('hidden');
+        teacherLinks.classList.remove('md:flex');
+        teacherBadge.classList.add('hidden');
+        teacherBadge.classList.remove('flex');
+      }
+
+      // Highlight active student nav tab
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const targetNav = btn.getAttribute('data-nav');
+        if (targetNav === screenId) {
+          btn.classList.add('text-[#1D39C4]', 'bg-[#A8D1FA]/35', 'font-semibold');
+          btn.classList.remove('text-slate-600');
+        } else {
+          btn.classList.remove('text-[#1D39C4]', 'bg-[#A8D1FA]/35', 'font-semibold');
+          btn.classList.add('text-slate-600');
+        }
+      });
+
+      // Highlight bottom prototype jump bar
+      document.querySelectorAll('.jump-pill').forEach(pill => {
+        if (pill.getAttribute('data-jump') === screenId) {
+          pill.classList.add('bg-[#1D39C4]', 'text-white');
+          pill.classList.remove('text-slate-300');
+        } else {
+          pill.classList.remove('bg-[#1D39C4]', 'text-white');
+          pill.classList.add('text-slate-300');
+        }
+      });
+
+      // Screen-specific renders
+      if (screenId === 'screen-2') renderStudentDashboard();
+      if (screenId === 'screen-4') renderSurveyQuestion();
+      if (screenId === 'screen-5') renderCareerRecommendations();
+      if (screenId === 'screen-6') renderSkillGapScreen();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleStudentLogin(e) {
+      e.preventDefault();
+      showToast('เข้าสู่ระบบสำเร็จ ยินดีต้อนรับ สมชาย ใจดี');
+      navigateTo('screen-2');
+    }
+
+    // ---------------------------------------------------------
+    // 3. SCREEN 2: STUDENT DASHBOARD RENDERING
+    // ---------------------------------------------------------
+    function renderStudentDashboard() {
+      const skillCount = appState.skills.length;
+      const projCount = appState.projects.length;
+
+      document.getElementById('dash-step1-summary').textContent =
+        `เล่าไปแล้ว ${projCount} โปรเจกต์ ได้ทักษะ ${skillCount} อย่าง`;
+      document.getElementById('dash-skill-count-pill').textContent = `${skillCount} ทักษะ`;
+
+      if (appState.surveyCompleted) {
+        const step2Badge = document.getElementById('dash-step2-badge');
+        step2Badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#3FA34D]/12 text-[#3FA34D]';
+        step2Badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#3FA34D]"></span> ขั้นที่ 2 - ทำแล้ว';
+
+        const step3Badge = document.getElementById('dash-step3-badge');
+        step3Badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#1D39C4]/10 text-[#1D39C4]';
+        step3Badge.textContent = 'ขั้นที่ 3 - ดูผลได้เลย';
+      }
+
+      // Render Skills List
+      const skillsListEl = document.getElementById('dash-skills-list');
+      skillsListEl.innerHTML = appState.skills.map(s => {
+        const levelBadgeClass = s.level === 'ปานกลาง'
+          ? 'bg-[#A8D1FA]/50 text-[#0A1647]'
+          : 'bg-slate-100 text-slate-700';
+        const sourceBadgeClass = s.source === 'AI สกัด'
+          ? 'text-[#1D39C4] bg-[#1D39C4]/8'
+          : 'text-slate-500 bg-slate-100';
+        return `
+          <div class="py-3 flex items-center justify-between gap-3">
+            <span class="font-en font-semibold text-sm text-slate-900">${s.name}</span>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md text-xs font-medium ${levelBadgeClass}">${s.level}</span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-medium ${sourceBadgeClass}">${s.source}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render Projects List
+      const projectsListEl = document.getElementById('dash-projects-list');
+      projectsListEl.innerHTML = appState.projects.map(p => `
+        <div class="p-4 rounded-xl border border-slate-200/90 bg-slate-50/60 space-y-2.5">
+          <div class="font-bold text-sm sm:text-base text-[#0A1647]">${p.title}</div>
+          <div class="flex flex-wrap gap-1.5">
+            ${p.skills.map(sk => `
+              <span class="font-en px-2.5 py-0.5 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700">
+                ${sk}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ---------------------------------------------------------
+    // 4. SCREEN 3: AI EXTRACTION & SKILL SAVING
+    // ---------------------------------------------------------
+    function updateSaveSkillCounter() {
+      const checkedCount = document.querySelectorAll('.extracted-skill-cb:checked').length;
+      const btn = document.getElementById('btn-save-extracted-skills');
+      btn.textContent = `บันทึก ${checkedCount} ทักษะ`;
+      btn.disabled = checkedCount === 0;
+      btn.classList.toggle('opacity-50', checkedCount === 0);
+    }
+
+    function runAiExtraction() {
+      const consent = document.getElementById('ai-consent-checkbox').checked;
+      if (!consent) {
+        showToast('กรุณาติ๊กยินยอมก่อนส่งข้อความให้ AI วิเคราะห์');
+        return;
+      }
+      const btn = document.getElementById('btn-ai-analyze');
+      const card = document.getElementById('ai-extraction-card');
+      const originalHtml = btn.innerHTML;
+
+      btn.innerHTML = `
+        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+        <span>กำลังวิเคราะห์จากคลังทักษะ...</span>
+      `;
+      card.classList.add('opacity-50');
+
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        card.classList.remove('opacity-50');
+        showToast('AI สกัดทักษะจากข้อความเรียบร้อยแล้ว');
+      }, 650);
+    }
+
+    function saveExtractedSkills() {
+      const titleInput = document.getElementById('project-title-input').value.trim() || 'รถบังคับหลบสิ่งกีดขวาง';
+      const checkedBoxes = Array.from(document.querySelectorAll('.extracted-skill-cb:checked'));
+      const selectedSkillNames = [];
+
+      checkedBoxes.forEach(cb => {
+        const name = cb.getAttribute('data-skill-name');
+        const level = cb.getAttribute('data-skill-level');
+        selectedSkillNames.push(name);
+
+        const existing = appState.skills.find(s => s.name === name);
+        if (existing) {
+          if (levelRank[level] > levelRank[existing.level]) {
+            existing.level = level;
+          }
+        } else {
+          appState.skills.push({
+            name,
+            level,
+            source: name === 'C/C++' ? 'ยืนยันเอง' : 'AI สกัด'
+          });
+        }
+      });
+
+      // Update or add project
+      const existingProj = appState.projects.find(p => p.title === titleInput);
+      if (existingProj) {
+        existingProj.skills = Array.from(new Set([...existingProj.skills, ...selectedSkillNames]));
+      } else {
+        appState.projects.unshift({
+          title: titleInput,
+          skills: selectedSkillNames
+        });
+      }
+
+      const cppAdded = selectedSkillNames.includes('C/C++');
+      showToast(
+        cppAdded
+          ? 'บันทึกทักษะพร้อมยืนยัน C/C++ แล้ว คะแนนสาย Embedded เพิ่มเป็น 71%'
+          : `บันทึก ${selectedSkillNames.length} ทักษะเข้าสู่โปรไฟล์เรียบร้อยแล้ว`
+      );
+      navigateTo('screen-2');
+    }
+
+    // ---------------------------------------------------------
+    // 5. SCREEN 4: 8-QUESTION SURVEY INTERACTIVITY
+    // ---------------------------------------------------------
+    function renderSurveyQuestion() {
+      const idx = appState.currentQuestionIdx;
+      const total = surveyQuestions.length;
+      const item = surveyQuestions[idx];
+
+      document.getElementById('survey-step-label').textContent = `ข้อ ${idx + 1} จาก ${total}`;
+      document.getElementById('survey-progress-bar').style.width = `${((idx + 1) / total) * 100}%`;
+      document.getElementById('survey-question-text').textContent = item.q;
+
+      // Render step dots
+      const dotsEl = document.getElementById('survey-dots');
+      dotsEl.innerHTML = surveyQuestions.map((_, i) => {
+        const activeClass = i === idx
+          ? 'bg-[#1D39C4] text-white font-bold ring-4 ring-[#1D39C4]/15'
+          : i < idx
+            ? 'bg-[#7393FF] text-white'
+            : 'bg-slate-100 text-slate-500 hover:bg-slate-200';
+        return `
+          <button
+            type="button"
+            onclick="jumpSurveyQuestion(${i})"
+            class="font-en w-7 h-7 rounded-full text-xs flex items-center justify-center transition ${activeClass}"
+          >
+            ${i + 1}
+          </button>
+        `;
+      }).join('');
+
+      // Render 4 options
+      const optsEl = document.getElementById('survey-options-container');
+      optsEl.innerHTML = item.options.map((optText, optIdx) => {
+        const isSelected = item.selected === optIdx;
+        const cardStyle = isSelected
+          ? 'border-2 border-[#1D39C4] bg-[#A8D1FA]/20 text-[#0A1647]'
+          : 'border border-slate-200 hover:border-[#7393FF] bg-white text-slate-700';
+        const radioOuter = isSelected
+          ? 'border-[#1D39C4] bg-[#1D39C4]'
+          : 'border-slate-300 bg-white';
+        return `
+          <label
+            onclick="selectSurveyOption(${optIdx})"
+            class="flex items-center gap-3.5 p-4 rounded-xl cursor-pointer transition ${cardStyle}"
+          >
+            <span class="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${radioOuter}">
+              ${isSelected ? '<span class="w-2 h-2 rounded-full bg-white"></span>' : ''}
+            </span>
+            <span class="text-sm sm:text-base font-medium leading-snug">${optText}</span>
+          </label>
+        `;
+      }).join('');
+
+      // Prev / Next button states
+      const prevBtn = document.getElementById('btn-survey-prev');
+      prevBtn.disabled = idx === 0;
+      prevBtn.classList.toggle('opacity-40', idx === 0);
+
+      const nextBtn = document.getElementById('btn-survey-next');
+      nextBtn.textContent = idx === total - 1 ? 'ดูสายงานที่แนะนำ' : 'ข้อถัดไป';
+    }
+
+    function selectSurveyOption(optIdx) {
+      surveyQuestions[appState.currentQuestionIdx].selected = optIdx;
+      renderSurveyQuestion();
+    }
+
+    function jumpSurveyQuestion(idx) {
+      appState.currentQuestionIdx = idx;
+      renderSurveyQuestion();
+    }
+
+    function prevSurveyQuestion() {
+      if (appState.currentQuestionIdx > 0) {
+        appState.currentQuestionIdx--;
+        renderSurveyQuestion();
+      }
+    }
+
+    function nextSurveyQuestion() {
+      if (appState.currentQuestionIdx < surveyQuestions.length - 1) {
+        appState.currentQuestionIdx++;
+        renderSurveyQuestion();
+      } else {
+        appState.surveyCompleted = true;
+        showToast('ส่งคำตอบครบ 8 ข้อแล้ว กำลังแสดงสายงานที่แนะนำ');
+        navigateTo('screen-5');
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 6. SCREEN 5 & 6: CAREER RECOMMENDATIONS & SKILL GAP
+    // ---------------------------------------------------------
+    function renderCareerRecommendations() {
+      const rank1Container = document.getElementById('rec-rank1-skills');
+      const embeddedSkillNames = ['Microcontroller', 'Logic Control', 'Sensor Interfacing', 'C/C++'];
+      const matched = appState.skills
+        .filter(s => embeddedSkillNames.includes(s.name))
+        .map(s => s.name);
+
+      rank1Container.innerHTML = matched.map(name => `
+        <span class="font-en px-3 py-1 rounded-lg text-xs font-semibold bg-[#A8D1FA]/45 text-[#0A1647]">${name}</span>
+      `).join('');
+    }
+
+    function openSkillGapForCareer(careerName) {
+      appState.selectedCareer = careerName;
+      navigateTo('screen-6');
+    }
+
+    function renderSkillGapScreen() {
+      const career = appState.selectedCareer;
+      const def = careerDefinitions[career] || careerDefinitions['Embedded / IoT Engineer'];
+
+      document.getElementById('sg-career-heading').textContent = `Skill Gap: ${career}`;
+      document.getElementById('sg-history-career-tag').textContent = career;
+
+      // Update career pill buttons
+      const pills = {
+        'Embedded / IoT Engineer': 'sg-pill-embedded',
+        'Backend Developer': 'sg-pill-backend',
+        'DevOps Engineer': 'sg-pill-devops'
+      };
+      Object.entries(pills).forEach(([cName, elId]) => {
+        const el = document.getElementById(elId);
+        if (cName === career) {
+          el.className = 'font-en px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1D39C4] text-white transition';
+        } else {
+          el.className = 'font-en px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100 transition';
+        }
+      });
+
+      // Ensure Screen 6 matches Wireframe default (57% when C/C++ is not yet confirmed, 71% when C/C++ is confirmed)
+      let totalWeight = 0;
+      let earnedWeight = 0;
+      let countMet = 0;
+      let countBelow = 0;
+      let countMissing = 0;
+
+      const rowsHtml = def.requirements.map(req => {
+        // For Sensor Interfacing, wireframe shows student has 'พื้นฐาน' on Screen 6
+        let studentSkill = appState.skills.find(s => s.name === req.skill);
+        if (!studentSkill && req.skill === 'Sensor Interfacing' && career === 'Embedded / IoT Engineer') {
+          studentSkill = { name: 'Sensor Interfacing', level: 'พื้นฐาน' };
+        }
+
+        const currentLevel = studentSkill ? studentSkill.level : 'ยังไม่มี';
+        const curRank = levelRank[currentLevel];
+        const reqRank = levelRank[req.required];
+        const w = importanceWeight[req.importance];
+        totalWeight += w;
+
+        let statusBadge = '';
+        if (curRank >= reqRank) {
+          earnedWeight += w;
+          countMet++;
+          statusBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#3FA34D]/12 text-[#3FA34D]">✓ ครบแล้ว</span>`;
+        } else if (curRank > 0) {
+          earnedWeight += w * 0.5;
+          countBelow++;
+          statusBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">! ยังไม่ถึงเกณฑ์</span>`;
+        } else {
+          countMissing++;
+          statusBadge = `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">✕ ยังไม่มี</span>`;
+        }
+
+        const impBadge = req.importance === 'จำเป็น'
+          ? 'bg-[#0A1647]/8 text-[#0A1647] font-semibold'
+          : req.importance === 'ควรมี'
+            ? 'bg-[#A8D1FA]/40 text-[#1D39C4] font-medium'
+            : 'bg-slate-100 text-slate-600';
+
+        return `
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="py-3.5 px-6 font-en font-bold text-slate-900">${req.skill}</td>
+            <td class="py-3.5 px-4">
+              <span class="px-2.5 py-0.5 rounded-md text-xs ${impBadge}">${req.importance}</span>
+            </td>
+            <td class="py-3.5 px-4 text-slate-700">${req.required}</td>
+            <td class="py-3.5 px-4 font-medium ${currentLevel === 'ยังไม่มี' ? 'text-slate-400' : 'text-slate-900'}">${currentLevel}</td>
+            <td class="py-3.5 px-6 text-right">${statusBadge}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('sg-skills-table-body').innerHTML = rowsHtml;
+
+      const readinessPct = Math.round((earnedWeight / totalWeight) * 100);
+      document.getElementById('sg-readiness-percent').textContent = `${readinessPct}%`;
+
+      document.getElementById('sg-status-pills').innerHTML = `
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#3FA34D]/12 text-[#3FA34D]">ครบแล้ว ${countMet}</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">ยังไม่ถึงเกณฑ์ ${countBelow}</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">ยังไม่มี ${countMissing}</span>
+      `;
+
+      // Update Progression Chart
+      const [h1, h2] = def.history;
+      document.getElementById('sg-hist-1-val').textContent = `${h1}%`;
+      document.getElementById('sg-hist-1-bar').style.height = `${h1}%`;
+      document.getElementById('sg-hist-2-val').textContent = `${h2}%`;
+      document.getElementById('sg-hist-2-bar').style.height = `${h2}%`;
+      document.getElementById('sg-hist-3-val').textContent = `${readinessPct}%`;
+      document.getElementById('sg-hist-3-bar').style.height = `${readinessPct}%`;
+
+      // Update AI Summary Text based on Career & C/C++ state
+      const aiPara = document.getElementById('sg-ai-paragraph');
+      const aiSteps = document.getElementById('sg-ai-steps');
+      const hasCpp = appState.skills.some(s => s.name === 'C/C++');
+
+      if (career === 'Embedded / IoT Engineer') {
+        if (!hasCpp) {
+          aiPara.innerHTML = `คุณมีพื้นฐานด้านไมโครคอนโทรลเลอร์และเซนเซอร์ครบตามเกณฑ์แล้ว ช่องว่างหลักของสายนี้คือภาษา <strong class="font-en text-[#0A1647]">C/C++</strong> ซึ่งเป็นทักษะจำเป็นและคุณยังไม่ได้ระบุไว้ ถ้าคุณเคยใช้ภาษานี้กับบอร์ดจริง ลองกลับไปเพิ่มในโปรเจกต์ก่อน คะแนนจะเปลี่ยนทันที`;
+          aiSteps.innerHTML = `
+            <li>ยืนยันว่าเคยใช้ <span class="font-en font-semibold">C/C++</span> ในโปรเจกต์ที่ผ่านมาหรือไม่</li>
+            <li>ฝึกเขียนโปรแกรมควบคุมเงื่อนไขที่ซับซ้อนขึ้นให้ถึงระดับปานกลาง</li>
+            <li>ศึกษาพื้นฐาน <span class="font-en font-semibold">RTOS</span> แล้วลองกับบอร์ดที่มีอยู่</li>
+          `;
+        } else {
+          aiPara.innerHTML = `ยอดเยี่ยม! คุณยืนยันทักษะ <strong class="font-en text-[#3FA34D]">C/C++</strong> เรียบร้อยแล้ว ทำให้ทักษะจำเป็นครบทั้ง 3 รายการ คะแนนความพร้อมเพิ่มเป็น <strong class="font-en text-[#1D39C4]">${readinessPct}%</strong> ขั้นถัดไปแนะนำให้ยกระดับ Logic Control และทดลองใช้ RTOS`;
+          aiSteps.innerHTML = `
+            <li>ยกระดับ <span class="font-en font-semibold">Logic Control</span> จากระดับพื้นฐานเป็นระดับปานกลางผ่านโจทย์ State Machine</li>
+            <li>ศึกษาพื้นฐาน <span class="font-en font-semibold">RTOS</span> (FreeRTOS บน ESP32) เพื่อจัดการหลายงานพร้อมกัน</li>
+            <li>บันทึกโปรเจกต์ใหม่ที่เชื่อมเซนเซอร์หลายตัวเข้าด้วยกันเพื่ออัปเดตคะแนนครั้งถัดไป</li>
+          `;
+        }
+      } else if (career === 'Backend Developer') {
+        aiPara.innerHTML = `คุณมีพื้นฐานด้าน <strong class="font-en text-[#0A1647]">Python, SQL และ Git</strong> ครบตามเกณฑ์แล้ว สิ่งที่ควรเพิ่มเติมเพื่อปิดช่องว่างของสาย Backend คือการออกแบบและพัฒนา <strong class="font-en text-[#1D39C4]">REST API</strong>`;
+        aiSteps.innerHTML = `
+          <li>ทดลองสร้าง <span class="font-en font-semibold">REST API</span> ด้วย FastAPI หรือ Express เชื่อมกับฐานข้อมูล SQL</li>
+          <li>ฝึกจัดการ Authentication (JWT) และการออกแบบ Status Code ตามมาตรฐาน</li>
+          <li>ลองนำโปรเจกต์เว็บจองห้องเรียนมาต่อยอดเป็น API และบันทึกเพิ่มในระบบ</li>
+        `;
+      } else {
+        aiPara.innerHTML = `คุณมีพื้นฐานการใช้งาน <strong class="font-en text-[#0A1647]">Git</strong> และ <strong class="font-en text-[#0A1647]">Python</strong> แล้ว แต่สาย DevOps จำเป็นต้องมีทักษะด้านระบบปฏิบัติการ <strong class="font-en text-[#1D39C4]">Linux</strong> และ <strong class="font-en text-[#1D39C4]">Docker</strong>`;
+        aiSteps.innerHTML = `
+          <li>ฝึกใช้คำสั่งพื้นฐานบน <span class="font-en font-semibold">Linux</span> (จัดการไฟล์, Process, Permission และ SSH)</li>
+          <li>ทดลองเขียน <span class="font-en font-semibold">Dockerfile</span> เพื่อรันเว็บแอปพลิเคชันใน Container</li>
+          <li>ศึกษาแนวคิดพื้นฐานของ <span class="font-en font-semibold">CI/CD</span> ผ่าน GitHub Actions</li>
+        `;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 7. MODALS & TOAST HELPERS
+    // ---------------------------------------------------------
+    function openRegisterModal() {
+      document.getElementById('modal-title').textContent = 'สมัครใช้งานสำหรับนักศึกษา CPE';
+      document.getElementById('modal-body').innerHTML = `
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">ชื่อ - นามสกุล</label>
+            <input type="text" placeholder="เช่น สมชาย ใจดี" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">อีเมลมหาวิทยาลัย</label>
+            <input type="email" placeholder="student@example.ac.th" class="font-en w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"/>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">รหัสผ่าน</label>
+            <input type="password" placeholder="กำหนดรหัสผ่านอย่างน้อย 8 ตัวอักษร" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm"/>
+          </div>
+        </div>
+      `;
+      const pBtn = document.getElementById('modal-primary-btn');
+      pBtn.textContent = 'สร้างบัญชีและเข้าสู่ระบบ';
+      pBtn.onclick = () => {
+        closeModal();
+        showToast('สร้างบัญชีสำเร็จ กำลังเข้าสู่หน้าหลักนักศึกษา');
+        navigateTo('screen-2');
+      };
+      document.getElementById('custom-modal').classList.remove('hidden');
+    }
+
+    function openTeacherModal(section) {
+      const titleEl = document.getElementById('modal-title');
+      const bodyEl = document.getElementById('modal-body');
+      const pBtn = document.getElementById('modal-primary-btn');
+      pBtn.textContent = 'บันทึกข้อมูล';
+      pBtn.onclick = () => {
+        closeModal();
+        showToast('อัปเดตข้อมูลตั้งต้นในระบบเรียบร้อยแล้ว');
+      };
+
+      if (section === 'skills') {
+        titleEl.textContent = 'จัดการคลังทักษะ (36 ทักษะ)';
+        bodyEl.innerHTML = `
+          <p class="text-xs text-slate-500">AI จะเลือกสกัดเฉพาะทักษะที่อยู่ในรายการนี้เท่านั้น</p>
+          <div class="flex gap-2">
+            <input type="text" placeholder="เพิ่มชื่อทักษะใหม่ เช่น FreeRTOS" class="font-en flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs"/>
+            <select class="px-3 py-2 rounded-xl border border-slate-300 text-xs bg-white">
+              <option>Embedded</option>
+              <option>Software</option>
+              <option>Network</option>
+              <option>Data</option>
+            </select>
+          </div>
+          <div class="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden">
+            <div class="px-3.5 py-2.5 flex justify-between items-center bg-slate-50 text-xs font-semibold">
+              <span>ชื่อทักษะ</span><span>หมวดหมู่</span>
+            </div>
+            <div class="px-3.5 py-2 flex justify-between items-center text-xs"><span class="font-en font-semibold">C/C++</span><span class="px-2 py-0.5 rounded bg-[#A8D1FA]/40 text-[#0A1647]">Embedded</span></div>
+            <div class="px-3.5 py-2 flex justify-between items-center text-xs"><span class="font-en font-semibold">Microcontroller</span><span class="px-2 py-0.5 rounded bg-[#A8D1FA]/40 text-[#0A1647]">Embedded</span></div>
+            <div class="px-3.5 py-2 flex justify-between items-center text-xs"><span class="font-en font-semibold">Python</span><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Software</span></div>
+            <div class="px-3.5 py-2 flex justify-between items-center text-xs"><span class="font-en font-semibold">REST API</span><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Software</span></div>
+            <div class="px-3.5 py-2 flex justify-between items-center text-xs"><span class="font-en font-semibold">Linux</span><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">Network / Ops</span></div>
+          </div>
+        `;
+      } else if (section === 'careers') {
+        titleEl.textContent = 'จัดการสายงานและเกณฑ์ (5 สายงาน)';
+        bodyEl.innerHTML = `
+          <div class="p-3 rounded-xl bg-[#A8D1FA]/25 border border-[#A8D1FA] text-xs text-[#0A1647]">
+            สายงานที่เลือก: <strong class="font-en">Embedded / IoT Engineer</strong> (อ้างอิงประกาศรับสมัครงาน 24 รายการ)
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between p-2.5 rounded-lg border border-slate-200"><span class="font-en font-bold">C/C++</span><span>จำเป็น • ขั้นต่ำ: ปานกลาง</span></div>
+            <div class="flex justify-between p-2.5 rounded-lg border border-slate-200"><span class="font-en font-bold">Microcontroller</span><span>จำเป็น • ขั้นต่ำ: ปานกลาง</span></div>
+            <div class="flex justify-between p-2.5 rounded-lg border border-slate-200"><span class="font-en font-bold">Sensor Interfacing</span><span>จำเป็น • ขั้นต่ำ: พื้นฐาน</span></div>
+            <div class="flex justify-between p-2.5 rounded-lg border border-slate-200"><span class="font-en font-bold">Logic Control</span><span>ควรมี • ขั้นต่ำ: ปานกลาง</span></div>
+            <div class="flex justify-between p-2.5 rounded-lg border border-slate-200"><span class="font-en font-bold">RTOS</span><span>ควรมี • ขั้นต่ำ: พื้นฐาน</span></div>
+          </div>
+        `;
+      } else {
+        titleEl.textContent = 'จัดการแบบสำรวจความสนใจ (8 ข้อ)';
+        bodyEl.innerHTML = `
+          <p class="text-xs text-slate-500">ตัวอย่างการตั้งค่าน้ำหนักคะแนนของคำถามข้อที่ 3:</p>
+          <div class="p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs">
+            <div class="font-bold text-[#0A1647]">ข้อ 3: เวลาเจอ Bug คุณชอบทำแบบไหนมากกว่า?</div>
+            <div class="flex justify-between text-slate-600"><span>• นั่งไล่โค้ดทีละบรรทัด</span><span class="font-en font-semibold text-[#1D39C4]">Software +2</span></div>
+            <div class="flex justify-between text-slate-600"><span>• ลองวัดและตรวจดูฮาร์ดแวร์</span><span class="font-en font-semibold text-[#1D39C4]">Embedded +3</span></div>
+            <div class="flex justify-between text-slate-600"><span>• ดู log และเช็กจุดที่ระบบช้า</span><span class="font-en font-semibold text-[#1D39C4]">Backend +2, DevOps +2</span></div>
+            <div class="flex justify-between text-slate-600"><span>• เปิดหน้าจอดูสิ่งที่ผู้ใช้เห็น</span><span class="font-en font-semibold text-[#1D39C4]">Frontend +3</span></div>
+          </div>
+        `;
+      }
+
+      document.getElementById('custom-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('custom-modal').classList.add('hidden');
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const banner = document.getElementById('toast-banner');
+      document.getElementById('toast-message').textContent = msg;
+      banner.classList.remove('translate-x-[130%]');
+      banner.classList.add('translate-x-0');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        banner.classList.remove('translate-x-0');
+        banner.classList.add('translate-x-[130%]');
+      }, 3200);
+    }
+
+    // Initialize default views on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderStudentDashboard();
+      renderSurveyQuestion();
+      renderCareerRecommendations();
+      renderSkillGapScreen();
+    });
+  </script>
+</body>
+</html>
